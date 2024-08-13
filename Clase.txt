@@ -1,1 +1,29 @@
-Hola
+Estructuras de control
+Palabras reservadas
+Variables y constantes
+    #Ejepmlo para congelar variables: 
+
+        PI = 3.1415926535
+
+
+        #Comando para congelar un dato para que pase de variable a constante 
+
+        data = (31415926535,10)
+         #PI  =frozenset(data)
+
+        #Generar diccionario
+
+        valores={'pi': 31415926535}
+        print( valores['pi'])
+    Definicion de variables
+        Entero = int(input())
+        flotante= float(input())
+        pinocho= str(input())
+Tipos de datos diferenciados
+Adquirir y mostrar datos 
+
+Buenas practicas en la programacion 
+    a='x'
+    b= "equis we"
+    #Si solo se caputra una letra se ponen comillas simples si son mas de 1 se ponen comillas dobles 
+   
