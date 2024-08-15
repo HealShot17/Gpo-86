@@ -2,9 +2,10 @@
 (Es cierto que Python tiene la función max() incorporada, pero hacerla nosotros mismos es 
  muy buen ejercicio)"""
 
-print ("Ingrese 2 números por favor")
+N1= int (input('Ingrese el primer número por favor: '))
+N2= int (input('Ingrese el segundo número por favor: '))
 
-if a>b:
-    print("el número más grande es a")
+if N1>N2:
+    print("el número más grande es el primero")
 else: 
-    print("el número más grande es b")
+    print("el número más grande es el segundo")
