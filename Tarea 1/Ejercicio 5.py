@@ -14,5 +14,8 @@ for elemento in Numeros:
     x += elemento 
     y *= elemento 
 
-print( x,y)
+print("La cantidad sumada es")
+print(x)
+print("La cantidad multiplicada es")
+print(y)
 
