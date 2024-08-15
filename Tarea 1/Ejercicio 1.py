@@ -5,7 +5,9 @@
 N1= int (input('Ingrese el primer número por favor: '))
 N2= int (input('Ingrese el segundo número por favor: '))
 
-if N1>N2:
-    print("el número más grande es el primero")
+if N1==N2:
+    print("Los numeros son iguales")
+elif N1>N2:
+    print("El numero mas grande es el primero ")
 else: 
     print("el número más grande es el segundo")
