@@ -12,3 +12,9 @@ if lista1 in lista2:
     
 else:
     print("False")
+
+'''
+n= elemento
+for elemento in lista:
+    print(elemento,"lista en for")
+'''
