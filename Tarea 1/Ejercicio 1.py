@@ -5,13 +5,13 @@
 N1= int (input('Ingrese el primer número por favor: '))
 N2= int (input('Ingrese el segundo número por favor: '))
 N3= ("Ambos numeros son iguales")
-def max(N1,N2):
+def max(Dato1,Dato2):
     
-    if N1==N2:
+    if Dato1==Dato2:
         return N3
-    elif N1>N2:
-        return N1
+    elif Dato1>Dato2:
+        return Dato1
     else: 
-        return N2
+        return Dato2
 
-print("EL o los datos mayores son o son",max(N1,N2))
+print("EL o los datos mayores es: ",max(N1,N2))
