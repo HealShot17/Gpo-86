@@ -2,19 +2,29 @@
 al menos un miembro en común o devuelva True si tiene al menos un miembro en común o devuelva 
 False de lo contrario. Escribir la función usando el bucle for anidado."""
 
+n1 = int(input("Ingrese la cantidad de elementos en la primera lista: "))
+lista1 = []
+for i in range(n1):
+    elemento = input(f"Ingrese el elemento {i+1} de la primera lista: ")
+    lista1.append(elemento)
 
-lista1=[str(input('Primer caracter por favor ')),str(input('Segundo caracter por favor ')),str(input('Tercer caracter por favor ')),str(input('Cuarto caracter por favor '))]
-lista2=[str(input('Primer caracter por favor ')),str(input('Segundo caracter por favor ')),str(input('Tercer caracter por favor ')),str(input('Cuarto caracter por favor '))]
-
-
-if lista1 in lista2:
-    print("True")
+n2 = int(input("Ingrese la cantidad de elementos en la segunda lista: "))
+lista2 = []
+for i in range(n2):
+    elemento = input(f"Ingrese el elemento {i+1} de la segunda lista: ")
+    lista2.append(elemento)
     
-else:
-    print("False")
+def superposicion(lista1, lista2):
+    for elemento1 in lista1:
+        for elemento2 in lista2:
+            if elemento1 == elemento2:
+                return True
+    return False
 
-'''
-n= elemento
-for elemento in lista:
-    print(elemento,"lista en for")
-'''
+resultado = superposicion(lista1, lista2)
+
+# Mostrar el resultado
+if resultado:
+    print("Las listas tienen al menos un miembro en común.")
+else:
+    print("Las listas no tienen ningún miembro en común.")
