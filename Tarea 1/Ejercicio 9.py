@@ -4,7 +4,7 @@ Por ejemplo generar n caracteres(5,"x") deberia debolber "xxxxx"."""
 
 n = int(input("Ingrese el número de repeticiones: "))
 
-caracter = "input("Ingrese el carácter a repetir: ")"
+caracter = input("Ingrese el carácter a repetir: ")
 
 def generar_n_caracteres(n, caracter):
     return caracter * n
@@ -12,4 +12,5 @@ def generar_n_caracteres(n, caracter):
 
 
 resultado = generar_n_caracteres(n, caracter)
+
 print(f"La cadena generada es: {resultado}")
