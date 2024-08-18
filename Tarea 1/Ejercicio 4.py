@@ -3,11 +3,11 @@ de lo contrario devuelve False."""
 
 lista = ['a','e','i','o','u']
 
-Caracter = str(input("Ingrese un carcter"))
-
-if Caracter in lista:
-    print("True")
+Caracter = str(input("Ingrese un carcter: "))
+def Num_Car(Caracter):
+    if Caracter in lista:
+        print("True")
     
-else:
-    print("False")
-    
+    else:
+        print("False")
+Num_Car(Caracter)

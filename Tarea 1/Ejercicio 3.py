@@ -11,5 +11,4 @@ x = 0   #x es la cantidad de la suma
 for elemento in Datos:
     x= x+1
 
-print("La cantidad de valores en la lista es")
-print(x)
+print("La cantidad de valores en la lista es",x)
