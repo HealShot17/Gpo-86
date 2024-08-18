@@ -4,11 +4,10 @@
 
 N1= int (input('Ingrese el primer número por favor: '))
 N2= int (input('Ingrese el segundo número por favor: '))
-N3= ("Ambos numeros son iguales")
 def max(Dato1,Dato2):
     
     if Dato1==Dato2:
-        return N3
+        return "Ambos datos son iguales"
     elif Dato1>Dato2:
         return Dato1
     else: 
