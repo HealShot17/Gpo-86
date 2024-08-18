@@ -14,4 +14,4 @@ def max(Dato1,Dato2):
     else: 
         return Dato2
 
-print("EL o los datos mayores es: ",max(N1,N2))
+print("El o los datos mayores es: ",max(N1,N2))
