@@ -2,13 +2,17 @@
 (Es cierto que Python tiene la funcion len() incorporada, para escribirla por 
 nosotros mismos resulta muy buen ejercicio)."""
 
-Datos =[(input("Ingrese el primer dato por favor:")),
-          (input("Ingrese el segundo dato por favor:")),
-          (input("Ingrese el tercer dato por favor:")),
-          (input("Ingrese el cuarto dato por favor:"))]
-x = 0   #x es la cantidad de la suma
+elemento= str(input("Ingrese la cande que requiere: "))
+Contador = 0
+def longitud(elemento):
+    
+    for dato in elemento:
+        Contador = Contador + 1
+    return Contador
 
-for elemento in Datos:
-    x= x+1
 
-print("La cantidad de valores en la lista es",x)
+
+
+
+
+print(longitud(elemento))  
