@@ -4,8 +4,8 @@ de lo contrario devuelve False."""
 lista = ['a','e','i','o','u']
 
 Caracter = str(input("Ingrese un carcter: "))
-def Num_Car(Caracter):
-    if Caracter in lista:
+def Num_Car(DatoDado):
+    if DatoDado in lista:
         print("True")
     
     else:
