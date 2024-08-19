@@ -29,7 +29,7 @@ edad= int (input('Ingrese su edad: '))
 if edad >= 18:
     print('Bienvenido a GitHub')
 elif edad >= 16 and edad < 18:
-    print("No puedes entrar hasta dentro de 2 años aprox ")
+    print(f"No puedes entrar hasta dentro de {18-edad} años aprox ")
 elif edad > 13 and edad < 16:
     print('No puedes entrar a este sitio')
 else:   
