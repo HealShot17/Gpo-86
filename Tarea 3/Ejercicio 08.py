@@ -1,0 +1,1 @@
+'''Hacer un script que pida al usuario dos cadenas de texto y las imprima concatenadas.'''

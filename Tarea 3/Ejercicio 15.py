@@ -1,0 +1,1 @@
+'''Desarrollar un script que pida al usuario una oracion y cuente cuantas palabras tiene'''

@@ -1,0 +1,1 @@
+'''Escribir un programa que reciba una serie de calificaciones y luego imprima el promedio'''
