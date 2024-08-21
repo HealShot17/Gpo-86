@@ -1,1 +1,1 @@
-''' Crear un programa que reciba un n´umero flotante y lo muestre redondeado a dos decimales.'''
+''' Crear un programa que reciba un numero flotante y lo muestre redondeado a dos decimales.'''
