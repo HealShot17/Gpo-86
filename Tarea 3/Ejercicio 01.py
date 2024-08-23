@@ -2,5 +2,6 @@
 que incluya ambos.
 """
 nombre=(input("Ingrese el nombre de la persona por favor: "))
-edad=int(input(f"Ingrese la edad de {nombre} edad por favor: "))
-print(f"Bienvenido {nombre.title}. \nTe felicitamos en este pais es complicado cumplir {edad} años ")
+nombre_titulado=nombre.title()
+edad=int(input(f"Ingrese la edad de {nombre_titulado} edad por favor: "))
+print(f"Bienvenido {nombre_titulado}. \nTe felicitamos en este pais es complicado cumplir {edad} años ")
