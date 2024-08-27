@@ -26,5 +26,33 @@ print()"""
 
 #listaUnos =[1]*100             #Vector de datos
 #listaUnos =[[1]*100]*100       #Lista de datos
-listaUnos =[[[1]*100]*100]*    #100 Cubo de datos
-print(listaUnos)      
+#listaUnos =[[[1]*100]*100]*    #100 Cubo de datos
+#print(listaUnos)    
+
+tex = input("Ingrese un texto: ")
+print(tex[::-1])
+
+
+"""
+class Prototipo:
+        def __init__(self):
+            print("Hola")
+        def __str__(self):
+            return "PrototipoX"
+
+
+H = Prototipo()
+print(H)
+print(H.lorem().split(" "))     
+print(len(H.lorem().split(" ")))   
+print(tex.split(" "))
+"""
+tex1 = "Hola"
+tex2 = "Mundo"
+var1 = 20
+#Contatenar
+print(tex1+tex2+str(var1))
+
+with open("dataser_modificado.vsv,r") as CSV:
+    for line in CSV.readline():
+        print(line)
