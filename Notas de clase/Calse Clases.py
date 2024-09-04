@@ -4,7 +4,7 @@ Clases
 Declaración
 Uso
 Herencia
-Polimorfismo
+Polimorfismo    (No existe)
 Abstración
 '''
 

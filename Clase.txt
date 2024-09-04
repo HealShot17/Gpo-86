@@ -42,3 +42,7 @@ b = int(input("Ingrese las columnas: "))
 
 for i in range(a)
     lista2.append(int(input(f"Ingrese el elemento de la fila {i} y la columnas {j})))
+
+
+
+Python es un programa ejecutable
