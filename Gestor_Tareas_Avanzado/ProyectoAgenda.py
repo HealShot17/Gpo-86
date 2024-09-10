@@ -3,17 +3,15 @@ from abc import ABC, abstractmethod
 
 # Función principal del gestor de tareas
 def gestor_de_tareas():
-    """
-    Función principal para interactuar con el gestor de tareas.
-    Ofrece un menú para agregar y mostrar tareas.
-    """
     tareas = []
     while True:
         print("\n--- Menú de Gestor de Tareas ---")
         print("1. Agregar tarea simple")
         print("2. Agregar tarea con fecha límite")
         print("3. Mostrar todas las tareas")
-        print("4. Salir")
+        print("4. Eliminar una tarea")
+        print("5. Marcar tarea como completada")
+        print("6. Salir")
 
         opcion = input("Selecciona una opción: ")
 
@@ -24,10 +22,15 @@ def gestor_de_tareas():
         elif opcion == "3":
             mostrar_tareas(tareas)
         elif opcion == "4":
+            eliminar_tarea(tareas)
+        elif opcion == "5":
+            marcar_tarea_completada(tareas)
+        elif opcion == "6":
             print("Saliendo del gestor de tareas. ¡Hasta pronto!")
             break
         else:
-            print("Intenta con una opcion valida, por favor.")
+            print("Intenta con una opción válida, por favor.")
+
 
 class Tarea(ABC):
     """
@@ -45,6 +48,13 @@ class Tarea(ABC):
         """
         self.nombre = nombre
         self.etiquetas = etiquetas if etiquetas is not None else set()
+        self.completada = False  # Atributo para marcar si la tarea está completada
+
+    def marcar_completada(self):
+        """
+        Marca la tarea como completada.
+        """
+        self.completada = True
 
     @abstractmethod
     def mostrar_informacion(self):
@@ -64,7 +74,8 @@ class TareaSimple(Tarea):
         """
         Muestra la información de la tarea simple.
         """
-        print(f"Tarea: {self.nombre}")
+        estado = "Completada" if self.completada else "Pendiente"
+        print(f"Tarea: {self.nombre} - Estado: {estado}")
         if self.etiquetas:
             print(f"Etiquetas: {', '.join(self.etiquetas)}")
         else:
@@ -93,7 +104,8 @@ class TareaConFechaLimite(Tarea):
         """
         Muestra la información de la tarea con fecha límite.
         """
-        print(f"Tarea: {self.nombre}")
+        estado = "Completada" if self.completada else "Pendiente"
+        print(f"Tarea: {self.nombre} - Estado: {estado}")
         print(f"Fecha límite: {self.fecha_limite[0]}-{self.fecha_limite[1]:02d}-{self.fecha_limite[2]:02d}")
         if self.etiquetas:
             print(f"Etiquetas: {', '.join(self.etiquetas)}")
@@ -103,26 +115,15 @@ class TareaConFechaLimite(Tarea):
 
 # Función para agregar una tarea simple
 def agregar_tarea_simple(tareas):
-    """
-    Solicita al usuario que ingrese los detalles de una tarea simple y la agrega a la lista de tareas.
-
-    Args:
-        tareas (list): Lista donde se almacenan las tareas.
-    """
     nombre = input("Ingresa el nombre de la tarea: ")
     etiquetas = set(input("Ingresa las etiquetas separadas por comas: ").split(","))
     tarea = TareaSimple(nombre, etiquetas)
     tareas.append(tarea)
     print(f"Tarea '{nombre}' agregada con éxito.")
 
+
 # Función para agregar una tarea con fecha límite
 def agregar_tarea_con_fecha(tareas):
-    """
-    Solicita al usuario que ingrese los detalles de una tarea con fecha límite y la agrega a la lista de tareas.
-
-    Args:
-        tareas (list): Lista donde se almacenan las tareas.
-    """
     nombre = input("Ingresa el nombre de la tarea: ")
     fecha_input = input("Ingresa la fecha límite (YYYY-MM-DD): ")
     fecha_limite = tuple(map(int, fecha_input.split("-")))
@@ -131,22 +132,52 @@ def agregar_tarea_con_fecha(tareas):
     tareas.append(tarea)
     print(f"Tarea '{nombre}' con fecha límite agregada con éxito.")
 
+
 # Función para mostrar todas las tareas
 def mostrar_tareas(tareas):
-    """
-    Muestra todas las tareas almacenadas en la lista.
-
-    Args:
-        tareas (list): Lista de tareas a mostrar.
-    """
     if tareas:
-        for tarea in tareas:
+        for i, tarea in enumerate(tareas):
+            print(f"{i}.")
             tarea.mostrar_informacion()
             print("-" * 40)
     else:
         print("No hay tareas disponibles.")
 
+
+# Función para eliminar una tarea
+def eliminar_tarea(tareas):
+    if tareas:
+        mostrar_tareas(tareas)
+        try:
+            indice = int(input("Ingresa el número de la tarea que deseas eliminar (empezando desde 0): "))
+            if 0 <= indice < len(tareas):
+                tarea_eliminada = tareas.pop(indice)
+                print(f"Tarea '{tarea_eliminada.nombre}' eliminada con éxito.")
+            else:
+                print("Índice fuera de rango. Intenta nuevamente.")
+        except ValueError:
+            print("Entrada no válida. Por favor ingresa un número.")
+    else:
+        print("No hay tareas para eliminar.")
+
+
+# Función para marcar una tarea como completada
+def marcar_tarea_completada(tareas):
+    mostrar_tareas(tareas)
+    if tareas:
+        try:
+            indice = int(input("Ingresa el número de la tarea que deseas marcar como completada (empezando desde 0): "))
+            if 0 <= indice < len(tareas):
+                tareas[indice].marcar_completada()
+                print(f"Tarea '{tareas[indice].nombre}' marcada como completada.")
+            else:
+                print("Índice de tarea inválido.")
+        except ValueError:
+            print("Entrada no válida. Por favor ingresa un número.")
+    else:
+        print("No hay tareas disponibles.")
+
+
 # Ejecutar el programa
 if __name__ == "__main__":
     gestor_de_tareas()
-
