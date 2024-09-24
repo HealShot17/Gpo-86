@@ -177,7 +177,49 @@ def marcar_tarea_completada(tareas):
     else:
         print("No hay tareas disponibles.")
 
+def pruebas_gestor_de_tareas():
+    # Lista de tareas para probar
+    tareas = []
+    
+    # Prueba agregar tarea simple
+    print("\n=== Prueba 1: Agregar Tarea Simple ===")
+    tarea_simple = TareaSimple("Comprar leche", {"compras", "urgente"})
+    tareas.append(tarea_simple)
+    assert len(tareas) == 1, "Error al agregar tarea simple"
+    assert tareas[0].nombre == "Comprar leche", "Nombre incorrecto en tarea simple"
+    assert "compras" in tareas[0].etiquetas, "Error en las etiquetas de la tarea simple"
+    print("Prueba de agregar tarea simple: PASÓ")
+    
+    # Prueba agregar tarea con fecha límite
+    print("\n=== Prueba 2: Agregar Tarea con Fecha Límite ===")
+    tarea_fecha = TareaConFechaLimite("Entregar proyecto", (2024, 9, 15), {"trabajo"})
+    tareas.append(tarea_fecha)
+    assert len(tareas) == 2, "Error al agregar tarea con fecha límite"
+    assert tareas[1].nombre == "Entregar proyecto", "Nombre incorrecto en tarea con fecha límite"
+    assert tareas[1].fecha_limite == (2024, 9, 15), "Fecha límite incorrecta"
+    print("Prueba de agregar tarea con fecha límite: PASÓ")
+
+    # Prueba mostrar tareas
+    print("\n=== Prueba 3: Mostrar Tareas ===")
+    mostrar_tareas(tareas)  # Esto imprime las tareas, así que no requiere assert, solo revisión visual
+
+    # Prueba eliminar tarea
+    print("\n=== Prueba 4: Eliminar Tarea ===")
+    eliminar_tarea(tareas)  # Se elimina la primera tarea (Comprar leche)
+    assert len(tareas) == 1, "Error al eliminar tarea"
+    assert tareas[0].nombre == "Entregar proyecto", "Error al eliminar la tarea correcta"
+    print("Prueba de eliminar tarea: PASÓ")
+
+    # Prueba marcar tarea como completada
+    print("\n=== Prueba 5: Marcar Tarea Como Completada ===")
+    tareas[0].marcar_completada()  # Marca como completada la tarea restante
+    assert tareas[0].completada is True, "Error al marcar tarea como completada"
+    print("Prueba de marcar tarea como completada: PASÓ")
+
+    print("\n=== Todas las pruebas han pasado ===")
+
 
 # Ejecutar el programa
 if __name__ == "__main__":
+    pruebas_gestor_de_tareas()
     gestor_de_tareas()
