@@ -1,16 +1,18 @@
 import tkinter as tk
+from tkinter import messagebox
 import requests
 import pandas as pd
-import matplotlib.pyplot as plt
-from tkinter import messagebox
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
-# Mostrar sugerencias de paises
+# Mostrar sugerencias de países
 def mostrar_sugerencias(sugerencias):
-    lista_sugerencias.delete(0, tk.END) 
+    lista_sugerencias.delete(0, tk.END)
     for sugerencia in sugerencias:
         lista_sugerencias.insert(tk.END, sugerencia)
     lista_sugerencias.pack()
+
 
 # Obtener sugerencias en español
 def actualizar_sugerencias(event):
@@ -18,13 +20,13 @@ def actualizar_sugerencias(event):
     if len(pais) < 2:
         lista_sugerencias.pack_forget()
         return
-    
+
     url = f"https://restcountries.com/v3.1/name/{pais}"
     try:
         respuesta = requests.get(url)
         respuesta.raise_for_status()
         datos = respuesta.json()
-        
+
         sugerencias = [
             dato["translations"]["spa"]["common"]
             for dato in datos
@@ -34,27 +36,30 @@ def actualizar_sugerencias(event):
     except requests.exceptions.RequestException:
         lista_sugerencias.pack_forget()
 
-# Información detallada de un país
+
+# Buscar información de un país
 def buscar_pais(pais=None):
     pais = pais or entrada_pais.get().strip()
-    if not pais:
-        messagebox.showwarning("Advertencia", "Por favor, selecciona o introduce el nombre de un país.")
+    if not pais or not pais.isalpha():
+        messagebox.showwarning("Advertencia", "Introduce un nombre válido de país.")
         return
-    
-    url = f"https://restcountries.com/v3.1/translation/{pais}"
+
+    url = f"https://restcountries.com/v3.1/name/{pais}"
     try:
         respuesta = requests.get(url)
         respuesta.raise_for_status()
         datos = respuesta.json()
-        if datos:
+
+        if datos and isinstance(datos, list):
             mostrar_info_pais(datos[0])
             guardar_datos_en_excel(datos[0])
         else:
             messagebox.showerror("Error", f"No se encontró información para '{pais}'.")
     except requests.exceptions.RequestException as e:
-        messagebox.showerror("Error", f"No se pudo conectar a la API. {e}")
+        messagebox.showerror("Error", f"No se pudo conectar a la API: {e}")
 
-# Mostrar la información
+
+# Mostrar información del país
 def mostrar_info_pais(info):
     nombre = info.get("translations", {}).get("spa", {}).get("common", "No disponible")
     capital = info.get("capital", ["No disponible"])[0]
@@ -65,12 +70,6 @@ def mostrar_info_pais(info):
     idiomas = ", ".join(info.get("languages", {}).values()) if "languages" in info else "No disponible"
     moneda = ", ".join([moneda["name"] for moneda in info.get("currencies", {}).values()]) if "currencies" in info else "No disponible"
 
-    es_valido, mensaje = validar_datos(poblacion, area)
-    if not es_valido:
-        messagebox.showerror("Error de validación", mensaje)
-        return
-
-    # Mostrar la información
     resultado = f"""
     Nombre: {nombre}
     Capital: {capital}
@@ -86,14 +85,13 @@ def mostrar_info_pais(info):
     texto_resultado.insert(tk.END, resultado)
     texto_resultado.config(state=tk.DISABLED)
 
-    # Generar las gráficas de cada pais
-    generar_grafico_barras(poblacion, area)
-    generar_grafico_pastel(idiomas)
-    generar_grafico_lineas()
-    generar_grafico_dispersion([poblacion], [area])
-    lista_sugerencias.pack_forget() 
+    # Mostrar gráficos en la ventana
+    mostrar_grafico_barras(poblacion, area)
+    mostrar_grafico_pastel(idiomas)
+    lista_sugerencias.pack_forget()
 
-# ALmacenar los datos en Excel
+
+# Guardar datos en Excel
 def guardar_datos_en_excel(info):
     nombre = info.get("translations", {}).get("spa", {}).get("common", "No disponible")
     capital = info.get("capital", ["No disponible"])[0]
@@ -104,7 +102,6 @@ def guardar_datos_en_excel(info):
     idiomas = ", ".join(info.get("languages", {}).values()) if "languages" in info else "No disponible"
     moneda = ", ".join([moneda["name"] for moneda in info.get("currencies", {}).values()]) if "currencies" in info else "No disponible"
 
-    # Crear un DataFrame con los datos
     datos = {
         "Nombre": [nombre],
         "Capital": [capital],
@@ -115,62 +112,63 @@ def guardar_datos_en_excel(info):
         "Idiomas": [idiomas],
         "Moneda": [moneda]
     }
-    
     df = pd.DataFrame(datos)
-    
-    # Guardar en un archivo
-    df.to_excel("informacion_pais.xlsx", index=False)
-    messagebox.showinfo("Éxito", "Los datos se han guardado correctamente en el archivo Excel.")
+    try:
+        df.to_excel("informacion_pais.xlsx", index=False)
+        messagebox.showinfo("Éxito", "Datos guardados correctamente en Excel.")
+    except Exception as e:
+        messagebox.showerror("Error", f"No se pudo guardar el archivo: {e}")
 
-# Generar los gráficos
-def generar_grafico_barras(poblacion, area):
-    plt.bar(["Población", "Área"], [poblacion, area])
-    plt.ylabel("Valor")
-    plt.title("Población y Área del País")
-    plt.show()
 
-def generar_grafico_pastel(idiomas):
+# Limpiar gráficos existentes
+def limpiar_graficos():
+    for widget in contenedor_graficos.winfo_children():
+        widget.destroy()
+
+
+# Mostrar gráficos en la ventana
+def mostrar_grafico_barras(poblacion, area):
+    limpiar_graficos()
+    figura = Figure(figsize=(4, 3), dpi=100)
+    ax = figura.add_subplot(111)
+    ax.bar(["Población", "Área"], [poblacion, area])
+    ax.set_title("Población y Área del País")
+    ax.set_ylabel("Valor")
+
+    canvas = FigureCanvasTkAgg(figura, contenedor_graficos)
+    canvas.get_tk_widget().pack()
+    canvas.draw()
+
+
+def mostrar_grafico_pastel(idiomas):
+    limpiar_graficos()
+    figura = Figure(figsize=(4, 3), dpi=100)
+    ax = figura.add_subplot(111)
     idioma_lista = idiomas.split(", ")
     idioma_count = {idioma: 1 for idioma in idioma_lista}
-    plt.pie(idioma_count.values(), labels=idioma_count.keys(), autopct='%1.1f%%')
-    plt.title("Distribución de Idiomas")
-    plt.show()
+    ax.pie(idioma_count.values(), labels=idioma_count.keys(), autopct='%1.1f%%')
+    ax.set_title("Distribución de Idiomas")
 
-def generar_grafico_lineas():
-    anos = [2000, 2020]
-    poblacion = [10_000_000, 15_000_000]
-    plt.plot(anos, poblacion, marker='o')
-    plt.xlabel("Año")
-    plt.ylabel("Población")
-    plt.title("Evolución de la Población")
-    plt.show()
+    canvas = FigureCanvasTkAgg(figura, contenedor_graficos)
+    canvas.get_tk_widget().pack()
+    canvas.draw()
 
-def generar_grafico_dispersion(poblaciones, areas):
-    plt.scatter(areas, poblaciones)
-    plt.xlabel("Área (km²)")
-    plt.ylabel("Población")
-    plt.title("Población vs. Área")
-    plt.show()
 
-# Validación de datos
-def validar_datos(poblacion, area):
-    if not isinstance(poblacion, (int, float)) or poblacion <= 0:
-        return False, "Población no válida"
-    if not isinstance(area, (int, float)) or area <= 0:
-        return False, "Área no válida"
-    return True, ""
-
-# Seleccionar un país de las sugerencias
+# Seleccionar una sugerencia
 def seleccionar_sugerencia(event):
-    seleccion = lista_sugerencias.get(lista_sugerencias.curselection())
-    entrada_pais.delete(0, tk.END)
-    entrada_pais.insert(0, seleccion)
-    buscar_pais(seleccion)
+    try:
+        seleccion = lista_sugerencias.get(lista_sugerencias.curselection())
+        entrada_pais.delete(0, tk.END)
+        entrada_pais.insert(0, seleccion)
+        buscar_pais(seleccion)
+    except tk.TclError:
+        return
+
 
 # Interfaz gráfica
 ventana = tk.Tk()
 ventana.title("Buscador de Información de Países")
-ventana.geometry("500x400")
+ventana.geometry("700x800")
 
 etiqueta = tk.Label(ventana, text="Introduce el nombre de un país:", font=("Arial", 12))
 etiqueta.pack(pady=10)
@@ -182,11 +180,13 @@ entrada_pais.bind("<KeyRelease>", actualizar_sugerencias)
 boton_buscar = tk.Button(ventana, text="Buscar", command=buscar_pais, font=("Arial", 12), bg="lightblue")
 boton_buscar.pack(pady=10)
 
-# Lista desplegable para sugerencias
 lista_sugerencias = tk.Listbox(ventana, font=("Arial", 10), height=5)
 lista_sugerencias.bind("<<ListboxSelect>>", seleccionar_sugerencia)
 
-texto_resultado = tk.Text(ventana, wrap=tk.WORD, font=("Arial", 10), state=tk.DISABLED, height=10, width=50)
+texto_resultado = tk.Text(ventana, wrap=tk.WORD, font=("Arial", 10), state=tk.DISABLED, height=10, width=70)
 texto_resultado.pack(pady=10)
+
+contenedor_graficos = tk.Frame(ventana)
+contenedor_graficos.pack(pady=10)
 
 ventana.mainloop()
