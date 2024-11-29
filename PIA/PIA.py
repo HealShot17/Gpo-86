@@ -6,12 +6,12 @@ from tkinter import messagebox
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
-# Mostrar sugerencias de paises
+# Mostrar sugerencias de países
 def mostrar_sugerencias(sugerencias):
-    lista_sugerencias.delete(0, tk.END) 
+    lista_sugerencias.delete(0, tk.END)
     for sugerencia in sugerencias:
         lista_sugerencias.insert(tk.END, sugerencia)
-    lista_sugerencias.pack()
+    lista_sugerencias.pack(fill=tk.BOTH, expand=True)
 
 # Obtener sugerencias en español
 def actualizar_sugerencias(event):
@@ -90,11 +90,9 @@ def mostrar_info_pais(info):
     # Limpiar las gráficas anteriores antes de agregar nuevas
     limpiar_graficas()
 
-    # Generar las gráficas de cada pais
-    generar_grafico_barras(poblacion, area)
+    # Generar las gráficas de idioma y población
     generar_grafico_pastel(idiomas)
     generar_grafico_lineas()
-    generar_grafico_dispersion([poblacion], [area])
     lista_sugerencias.pack_forget() 
 
 # Limpiar las gráficas anteriores
@@ -132,18 +130,7 @@ def guardar_datos_en_excel(info):
     df.to_excel("informacion_pais.xlsx", index=False)
     messagebox.showinfo("Éxito", "Los datos se han guardado correctamente en el archivo Excel.")
 
-# Generar los gráficos y mostrarlos en la ventana de Tkinter
-def generar_grafico_barras(poblacion, area):
-    fig, ax = plt.subplots(figsize=(5, 4))
-    ax.bar(["Población", "Área"], [poblacion, area])
-    ax.set_ylabel("Valor")
-    ax.set_title("Población y Área del País")
-    
-    # Agregar la gráfica a la ventana de Tkinter
-    canvas = FigureCanvasTkAgg(fig, master=frame_graficos)
-    canvas.draw()
-    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-
+# Generar el gráfico de distribución de idiomas
 def generar_grafico_pastel(idiomas):
     idioma_lista = idiomas.split(", ")
     idioma_count = {idioma: 1 for idioma in idioma_lista}
@@ -156,6 +143,7 @@ def generar_grafico_pastel(idiomas):
     canvas.draw()
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
+# Generar el gráfico de evolución de la población
 def generar_grafico_lineas():
     anos = [2000, 2020]
     poblacion = [10_000_000, 15_000_000]
@@ -164,18 +152,6 @@ def generar_grafico_lineas():
     ax.set_xlabel("Año")
     ax.set_ylabel("Población")
     ax.set_title("Evolución de la Población")
-    
-    # Agregar la gráfica a la ventana de Tkinter
-    canvas = FigureCanvasTkAgg(fig, master=frame_graficos)
-    canvas.draw()
-    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-
-def generar_grafico_dispersion(poblaciones, areas):
-    fig, ax = plt.subplots(figsize=(5, 4))
-    ax.scatter(areas, poblaciones)
-    ax.set_xlabel("Área (km²)")
-    ax.set_ylabel("Población")
-    ax.set_title("Población vs. Área")
     
     # Agregar la gráfica a la ventana de Tkinter
     canvas = FigureCanvasTkAgg(fig, master=frame_graficos)
@@ -200,13 +176,14 @@ def seleccionar_sugerencia(event):
 # Interfaz gráfica
 ventana = tk.Tk()
 ventana.title("Buscador de Información de Países")
-ventana.geometry("800x600")  # Ajustamos el tamaño de la ventana para que quepan las gráficas y la información
+ventana.geometry("1000x800")  # Tamaño más amplio para caber las gráficas y el contenido
+ventana.configure(bg="#F0F0F0")  # Fondo suave para la ventana
 
 # Frame para las entradas de información (izquierda)
-frame_izquierda = tk.Frame(ventana)
-frame_izquierda.pack(side=tk.LEFT, padx=10, pady=10, fill=tk.Y)
+frame_izquierda = tk.Frame(ventana, bg="#F0F0F0")
+frame_izquierda.pack(side=tk.LEFT, padx=20, pady=20, fill=tk.Y)
 
-etiqueta = tk.Label(frame_izquierda, text="Introduce el nombre de un país:", font=("Arial", 12))
+etiqueta = tk.Label(frame_izquierda, text="Introduce el nombre de un país:", font=("Arial", 14), bg="#F0F0F0")
 etiqueta.pack(pady=10)
 
 entrada_pais = tk.Entry(frame_izquierda, font=("Arial", 12))
@@ -224,7 +201,7 @@ texto_resultado = tk.Text(frame_izquierda, wrap=tk.WORD, font=("Arial", 10), sta
 texto_resultado.pack(pady=10)
 
 # Frame para las gráficas (derecha)
-frame_graficos = tk.Frame(ventana)
-frame_graficos.pack(side=tk.RIGHT, padx=10, pady=10, fill=tk.BOTH, expand=True)
+frame_graficos = tk.Frame(ventana, bg="#F0F0F0")
+frame_graficos.pack(side=tk.RIGHT, padx=20, pady=20, fill=tk.BOTH, expand=True)
 
 ventana.mainloop()
