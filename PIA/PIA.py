@@ -65,7 +65,7 @@ def mostrar_info_pais(info):
     area = info.get("area", 0)
     idiomas = ", ".join(info.get("languages", {}).values()) if "languages" in info else "No disponible"
     moneda = ", ".join([moneda["name"] for moneda in info.get("currencies", {}).values()]) if "currencies" in info else "No disponible"
-
+    densidad_poblacion = (poblacion/area)
     es_valido, mensaje = validar_datos(poblacion, area)
     if not es_valido:
         messagebox.showerror("Error de validación", mensaje)
@@ -81,7 +81,8 @@ def mostrar_info_pais(info):
     Área: {area} km²
     Idiomas: {idiomas}
     Moneda: {moneda}
-    """
+    Densidad de población: {f"{densidad_poblacion:.2f} habitantes por km²" if densidad_poblacion else "No disponible"}
+"""
     texto_resultado.config(state=tk.NORMAL)
     texto_resultado.delete(1.0, tk.END)
     texto_resultado.insert(tk.END, resultado)
@@ -101,7 +102,7 @@ def limpiar_graficas():
     for widget in frame_graficos.winfo_children():
         widget.destroy()
 
-# ALmacenar los datos en Excel
+# Almacenar los datos en Excel
 def guardar_datos_en_excel(info):
     nombre = info.get("translations", {}).get("spa", {}).get("common", "No disponible")
     capital = info.get("capital", ["No disponible"])[0]
